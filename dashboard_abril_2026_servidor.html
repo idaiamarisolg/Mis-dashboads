@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Operativo — Abril 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f5f5f0;color:#1a1a1a;font-size:14px}
+.header{background:#1a1a2e;color:#fff;padding:18px 28px;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:18px;font-weight:600;letter-spacing:-.3px}
+.header span{font-size:12px;opacity:.6;background:rgba(255,255,255,.1);padding:4px 12px;border-radius:20px}
+.tabs{background:#fff;border-bottom:1px solid #e8e8e4;padding:0 28px;display:flex;gap:0}
+.tab{padding:13px 20px;font-size:13px;font-weight:500;color:#888;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.tab:hover{color:#333}
+.tab.active{color:#1a1a2e;border-bottom-color:#185FA5}
+.content{padding:24px 28px;max-width:1400px;margin:0 auto}
+.section{display:none}.section.active{display:block}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:#fff;border-radius:10px;padding:16px;border:1px solid #eee}
+.kpi-label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.kpi-val{font-size:24px;font-weight:700;color:#1a1a2e;line-height:1}
+.kpi-sub{font-size:12px;margin-top:5px;color:#888}
+.up{color:#1D9E75}.dn{color:#c0392b}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:768px){.grid-2,.grid-3{grid-template-columns:1fr}}
+.card{background:#fff;border-radius:10px;padding:20px;border:1px solid #eee}
+.card h3{font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
+tbody td{padding:9px 10px;border-bottom:1px solid #f5f5f0;color:#1a1a2e;vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:#fafaf7}
+.num{text-align:right;font-variant-numeric:tabular-nums;font-family:monospace}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px}
+.badge-up{background:#e8f8f2;color:#1D9E75}
+.badge-dn{background:#fdeaea;color:#c0392b}
+.badge-neu{background:#f0f0f0;color:#666}
+.badge-warn{background:#fef7e7;color:#d68910}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.bar-label{font-size:12px;color:#555;width:130px;flex-shrink:0;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-wrap{flex:1;height:16px;background:#f0f0ee;border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width .5s ease}
+.bar-val{font-size:12px;font-weight:600;color:#1a1a2e;width:38px;text-align:right}
+.dias-badge{font-size:11px;color:#888;width:44px;text-align:right}
+select{font-size:13px;padding:8px 12px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#1a1a2e;width:100%;max-width:320px;margin-bottom:16px}
+.detail-hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500}
+.chip-info{background:#e6f1fb;color:#185FA5}
+.chip-warn{background:#fef7e7;color:#d68910}
+.chip-ok{background:#e8f8f2;color:#1D9E75}
+.chip-dn{background:#fdeaea;color:#c0392b}
+.area-row{padding:6px 0;border-bottom:1px solid #f5f5f0;display:flex;align-items:center;justify-content:space-between}
+.area-row:last-child{border-bottom:none}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:10px;font-size:12px;color:#666}
+.leg-item{display:flex;align-items:center;gap:5px}
+.leg-sq{width:10px;height:10px;border-radius:2px}
+.section-title{font-size:15px;font-weight:600;color:#1a1a2e;margin-bottom:14px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 Dashboard Operativo — Abril 2026</h1>
+  <span>ITOS + Resumen de ventas</span>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('resumen',this)">Resumen general</div>
+  <div class="tab" onclick="showTab('ventas',this)">Ventas por sucursal</div>
+  <div class="tab" onclick="showTab('ops',this)">Operaciones ITOS</div>
+  <div class="tab" onclick="showTab('detalle',this)">Detalle sucursal</div>
+</div>
+
+<div class="content">
+
+<!-- RESUMEN -->
+<div id="resumen" class="section active">
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-label">Ventas Abr 2026</div><div class="kpi-val">$3.66M</div><div class="kpi-sub up">▲ +29.6% vs 2025</div></div>
+    <div class="kpi"><div class="kpi-label">Ventas Abr 2025</div><div class="kpi-val">$2.82M</div><div class="kpi-sub" style="color:#aaa">referencia</div></div>
+    <div class="kpi"><div class="kpi-label">Sucursales activas</div><div class="kpi-val">18</div><div class="kpi-sub" style="color:#aaa">con datos Abr 2026</div></div>
+    <div class="kpi"><div class="kpi-label">Reprogramaciones</div><div class="kpi-val">417</div><div class="kpi-sub dn">Valle: 168 (40%)</div></div>
+    <div class="kpi"><div class="kpi-label">Órdenes atrasadas</div><div class="kpi-val">55</div><div class="kpi-sub dn">Valle: 37 órdenes</div></div>
+    <div class="kpi"><div class="kpi-label">Cancelaciones</div><div class="kpi-val">30</div><div class="kpi-sub" style="color:#aaa">Tintorería: 11</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Ventas Abril 2026 por sucursal</h3>
+      <div class="legend">
+        <div class="leg-item"><div class="leg-sq" style="background:#185FA5"></div>2026</div>
+        <div class="leg-item"><div class="leg-sq" style="background:#B5D4F4"></div>2025</div>
+      </div>
+      <div style="position:relative;height:280px">
+        <canvas id="chart-suc" role="img" aria-label="Ventas por sucursal"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Reprogramaciones por sucursal</h3>
+      <div id="reprog-bars" style="margin-top:4px"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3>Comparativo ventas por área de servicio — Abril 2025 vs 2026</h3>
+    <div class="legend" style="margin-bottom:10px">
+      <div class="leg-item"><div class="leg-sq" style="background:#185FA5"></div>2026</div>
+      <div class="leg-item"><div class="leg-sq" style="background:#B5D4F4"></div>2025</div>
+    </div>
+    <div style="position:relative;height:220px">
+      <canvas id="chart-areas" role="img" aria-label="Comparativo ventas por área"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Top atrasadas por sucursal — días promedio de retraso</h3>
+    <div id="atras-bars-resumen" style="margin-top:4px"></div>
+  </div>
+</div>
+
+<!-- VENTAS -->
+<div id="ventas" class="section">
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-label">Total cadena 2026</div><div class="kpi-val">$3.66M</div><div class="kpi-sub up">▲ $836k vs 2025</div></div>
+    <div class="kpi"><div class="kpi-label">Lavandería (líder)</div><div class="kpi-val">$1.61M</div><div class="kpi-sub up">▲ +48.7%</div></div>
+    <div class="kpi"><div class="kpi-label">Compostura</div><div class="kpi-val">$717.8k</div><div class="kpi-sub up">▲ +21.9%</div></div>
+    <div class="kpi"><div class="kpi-label">Tintorería</div><div class="kpi-val">$681k</div><div class="kpi-sub up">▲ +16.9%</div></div>
+    <div class="kpi"><div class="kpi-label">Mayor crecimiento</div><div class="kpi-val" style="font-size:16px">HEB</div><div class="kpi-sub up">▲ +70.1%</div></div>
+    <div class="kpi"><div class="kpi-label">Plaza del Lago</div><div class="kpi-val" style="font-size:16px">Estable</div><div class="kpi-sub" style="color:#aaa">+0.4%</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3>Comparativo Ventas Abril 2025 vs 2026 por sucursal</h3>
+    <div class="legend">
+      <div class="leg-item"><div class="leg-sq" style="background:#185FA5"></div>2026</div>
+      <div class="leg-item"><div class="leg-sq" style="background:#B5D4F4"></div>2025</div>
+    </div>
+    <div style="position:relative;height:260px">
+      <canvas id="chart-ventas-comp" role="img" aria-label="Comparativo ventas sucursales"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Tabla de ventas por sucursal — Abril</h3>
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Sucursal</th><th class="num">Abr 2025</th><th class="num">Abr 2026</th><th class="num">Δ Pesos</th><th class="num">Δ %</th></tr></thead>
+      <tbody id="tbl-ventas"></tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- OPS -->
+<div id="ops" class="section">
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-label">Total reprog.</div><div class="kpi-val">417</div><div class="kpi-sub dn">Valle concentra 40%</div></div>
+    <div class="kpi"><div class="kpi-label">Atrasadas total</div><div class="kpi-val">55</div><div class="kpi-sub dn">Prom. 7.1 días</div></div>
+    <div class="kpi"><div class="kpi-label">Cancelaciones</div><div class="kpi-val">30</div><div class="kpi-sub" style="color:#aaa">8 sucursales</div></div>
+    <div class="kpi"><div class="kpi-label">Calzado Valle</div><div class="kpi-val">135</div><div class="kpi-sub dn">Rep. calzado sin trabajar</div></div>
+    <div class="kpi"><div class="kpi-label">Motivo principal</div><div class="kpi-val" style="font-size:15px">Duplicadas</div><div class="kpi-sub" style="color:#aaa">Cancelaciones: 12</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Órdenes atrasadas por sucursal</h3>
+      <div id="atras-bars-ops" style="margin-top:4px"></div>
+    </div>
+    <div class="card">
+      <h3>Cancelaciones por categoría</h3>
+      <div style="position:relative;height:220px">
+        <canvas id="chart-cancelaciones" role="img" aria-label="Cancelaciones por categoría"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>Reprogramaciones por tipo de orden y sucursal</h3>
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr>
+        <th>Sucursal</th>
+        <th class="num">Compostura</th>
+        <th class="num">Planchado</th>
+        <th class="num">Tintorería</th>
+        <th class="num">Calzado</th>
+        <th class="num">Otros</th>
+        <th class="num">Total</th>
+      </tr></thead>
+      <tbody id="tbl-reprog"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>Cancelaciones por tipo de orden</h3>
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Tipo de orden</th><th class="num">Cancelaciones</th></tr></thead>
+      <tbody id="tbl-cancelaciones"></tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- DETALLE -->
+<div id="detalle" class="section">
+  <p style="font-size:13px;color:#666;margin-bottom:10px">Selecciona una sucursal para ver su información completa de Abril 2026:</p>
+  <select id="sel-suc" onchange="renderDetalle()"></select>
+  <div id="detalle-contenido"></div>
+</div>
+
+</div><!-- end content -->
+
+<script>
+/* ============================================================
+   URL DE TUS DATOS — cambia esta línea cuando subas datos.json
+   ============================================================ */
+const DATOS_URL = 'datos.json';
+
+let VENTAS, AREAS_TOTAL, AREAS_SUC, REPROG, ATRASADAS, CANC_CAT, CANC_TIPO;
+
+function fmt(n){if(!n&&n!==0)return'-';return '$'+Math.round(n).toLocaleString('es-MX')}
+function fmtk(n){if(!n&&n!==0)return'-';return '$'+(n/1000).toFixed(1)+'k'}
+function pct(a,b){if(!a)return null;return ((b-a)/a*100)}
+function pctStr(p){if(p===null)return '-';return (p>=0?'+':'')+p.toFixed(1)+'%'}
+function rTotal(r){return Object.values(r).reduce((a,b)=>a+b,0)}
+
+function showTab(id, el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+function buildBarRows(container, data, maxVal, color, extraFn){
+  container.innerHTML = data.map(([label,val])=>{
+    const pct = Math.round(val/maxVal*100);
+    const extra = extraFn ? extraFn(label) : '';
+    return `<div class="bar-row">
+      <span class="bar-label" title="${label}">${label}</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div>
+      <span class="bar-val">${val}</span>
+      ${extra}
+    </div>`;
+  }).join('');
+}
+
+function initCharts(){
+  // Chart sucursales resumen
+  const sucLabels = Object.keys(VENTAS).filter(s=>VENTAS[s].v26);
+  const v26data = sucLabels.map(s=>VENTAS[s].v26);
+  const v25data = sucLabels.map(s=>VENTAS[s].v25||0);
+
+  new Chart(document.getElementById('chart-suc'),{
+    type:'bar',
+    data:{
+      labels:sucLabels.map(s=>s.length>9?s.slice(0,8)+'…':s),
+      datasets:[
+        {label:'2025',data:v25data,backgroundColor:'#B5D4F4',borderRadius:3},
+        {label:'2026',data:v26data,backgroundColor:'#185FA5',borderRadius:3}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{font:{size:9},maxRotation:45,autoSkip:false}},
+        y:{ticks:{font:{size:9},callback:v=>'$'+(v/1000).toFixed(0)+'k'},grid:{color:'#f0f0ee'}}
+      }
+    }
+  });
+
+  // Reprog bars
+  const reprogSorted = Object.entries(REPROG).map(([s,r])=>([s,rTotal(r)])).sort((a,b)=>b[1]-a[1]);
+  const maxReprog = reprogSorted[0][1];
+  buildBarRows(document.getElementById('reprog-bars'), reprogSorted, maxReprog, '#D85A30', null);
+
+  // Atrasadas bars resumen
+  const atrasData = Object.entries(ATRASADAS).sort((a,b)=>b[1].n-a[1].n).map(([s,v])=>([s,v.n]));
+  const maxAt = atrasData[0][1];
+  document.getElementById('atras-bars-resumen').innerHTML = Object.entries(ATRASADAS).sort((a,b)=>b[1].n-a[1].n).map(([s,{n,dias}])=>{
+    const pct = Math.round(n/37*100);
+    return `<div class="bar-row">
+      <span class="bar-label">${s}</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:#c0392b"></div></div>
+      <span class="bar-val">${n}</span>
+      <span class="dias-badge">${dias}d</span>
+    </div>`;
+  }).join('');
+
+  // Areas total
+  const areaLabels = Object.keys(AREAS_TOTAL);
+  new Chart(document.getElementById('chart-areas'),{
+    type:'bar',
+    data:{
+      labels:areaLabels,
+      datasets:[
+        {label:'2025',data:areaLabels.map(a=>AREAS_TOTAL[a].v25),backgroundColor:'#B5D4F4',borderRadius:3},
+        {label:'2026',data:areaLabels.map(a=>AREAS_TOTAL[a].v26),backgroundColor:'#185FA5',borderRadius:3}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:9},callback:v=>'$'+(v/1000).toFixed(0)+'k'},grid:{color:'#f0f0ee'}}}
+    }
+  });
+
+  // Ventas comparativo tab
+  const sucFilt = Object.keys(VENTAS).filter(s=>VENTAS[s].v25&&VENTAS[s].v26);
+  new Chart(document.getElementById('chart-ventas-comp'),{
+    type:'bar',
+    data:{
+      labels:sucFilt.map(s=>s.length>9?s.slice(0,8)+'…':s),
+      datasets:[
+        {label:'2025',data:sucFilt.map(s=>VENTAS[s].v25),backgroundColor:'#B5D4F4',borderRadius:3},
+        {label:'2026',data:sucFilt.map(s=>VENTAS[s].v26),backgroundColor:'#185FA5',borderRadius:3}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:{font:{size:9},maxRotation:45,autoSkip:false}},y:{ticks:{font:{size:9},callback:v=>'$'+(v/1000).toFixed(0)+'k'},grid:{color:'#f0f0ee'}}}
+    }
+  });
+
+  // Ventas table
+  const sorted = Object.entries(VENTAS).filter(([s,v])=>v.v26).sort((a,b)=>b[1].v26-a[1].v26);
+  document.getElementById('tbl-ventas').innerHTML = sorted.map(([s,{v25,v26}])=>{
+    const d = v25 ? v26-v25 : null;
+    const p = v25 ? pct(v25,v26) : null;
+    return `<tr>
+      <td><strong>${s}</strong></td>
+      <td class="num">${v25?fmtk(v25):'-'}</td>
+      <td class="num">${fmtk(v26)}</td>
+      <td class="num ${d&&d>=0?'up':'dn'}">${d?((d>=0?'▲ ':'▼ ')+fmtk(Math.abs(d))):'-'}</td>
+      <td class="num"><span class="badge ${p===null?'badge-neu':p>=0?'badge-up':'badge-dn'}">${pctStr(p)}</span></td>
+    </tr>`;
+  }).join('');
+
+  // Ops - atrasadas
+  document.getElementById('atras-bars-ops').innerHTML = Object.entries(ATRASADAS).sort((a,b)=>b[1].n-a[1].n).map(([s,{n,dias}])=>{
+    const pct = Math.round(n/37*100);
+    return `<div class="bar-row">
+      <span class="bar-label">${s}</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:#c0392b"></div></div>
+      <span class="bar-val">${n}</span>
+      <span class="dias-badge">${dias}d prom</span>
+    </div>`;
+  }).join('');
+
+  // Cancelaciones doughnut
+  const cLabels = Object.keys(CANC_CAT);
+  new Chart(document.getElementById('chart-cancelaciones'),{
+    type:'doughnut',
+    data:{
+      labels:cLabels,
+      datasets:[{data:cLabels.map(c=>CANC_CAT[c]),backgroundColor:['#185FA5','#D85A30','#BA7517','#1D9E75','#A32D2D','#8e44ad','#16a085','#e67e22','#2c3e50'],borderWidth:2,borderColor:'#fff'}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,position:'right',labels:{font:{size:10},boxWidth:12}}}
+    }
+  });
+
+  // Reprog table
+  const reprogSucursales = Object.keys(REPROG).sort();
+  document.getElementById('tbl-reprog').innerHTML = reprogSucursales.map(s=>{
+    const r=REPROG[s];
+    const comp=r['COMPOSTURA DE ROPA']||0;
+    const planch=r['PLANCHADO']||0;
+    const tinto=r['TINTORERIA']||0;
+    const calz=r['REPARACION DE CALZADO']||0;
+    const otros=(r['BAGSPA']||0)+(r['LAVANDERIA']||0)+(r['BORDADOS']||0);
+    const tot=comp+planch+tinto+calz+otros;
+    return `<tr>
+      <td><strong>${s}</strong></td>
+      <td class="num">${comp||'-'}</td>
+      <td class="num">${planch||'-'}</td>
+      <td class="num">${tinto||'-'}</td>
+      <td class="num">${calz>0?`<span class="badge badge-dn">${calz}</span>`:'-'}</td>
+      <td class="num">${otros||'-'}</td>
+      <td class="num"><strong>${tot}</strong></td>
+    </tr>`;
+  }).join('');
+
+  // Cancelaciones tipo table
+  document.getElementById('tbl-cancelaciones').innerHTML = Object.entries(CANC_TIPO).sort((a,b)=>b[1]-a[1]).map(([tipo,n])=>
+    `<tr><td>${tipo}</td><td class="num"><strong>${n}</strong></td></tr>`
+  ).join('');
+
+  // Detalle selector
+  const sel = document.getElementById('sel-suc');
+  sel.innerHTML = Object.keys(VENTAS).map(s=>`<option value="${s}">${s}</option>`).join('');
+  renderDetalle();
+}
+
+function renderDetalle(){
+  const suc = document.getElementById('sel-suc').value;
+  const v = VENTAS[suc]||{};
+  const areas = AREAS_SUC[suc]||{};
+  const r = REPROG[suc]||{};
+  const rTot = rTotal(r);
+  const at = ATRASADAS[suc]||{n:0,dias:0};
+  const d = v.v25 ? v.v26-v.v25 : null;
+  const p = v.v25 ? pct(v.v25,v.v26) : null;
+
+  const reprogItems = Object.entries(r).sort((a,b)=>b[1]-a[1]);
+  const maxR = reprogItems.length ? reprogItems[0][1] : 1;
+
+  const areaList = Object.entries(areas).filter(([a,{v25,v26}])=>v25>0||v26>0);
+
+  document.getElementById('detalle-contenido').innerHTML = `
+    <div class="detail-hero">
+      <div class="kpi"><div class="kpi-label">Ventas Abr 2026</div><div class="kpi-val">${v.v26?fmtk(v.v26):'-'}</div></div>
+      <div class="kpi"><div class="kpi-label">Ventas Abr 2025</div><div class="kpi-val">${v.v25?fmtk(v.v25):'-'}</div></div>
+      <div class="kpi"><div class="kpi-label">Variación</div><div class="kpi-val ${p===null?'':p>=0?'up':'dn'}">${pctStr(p)}</div><div class="kpi-sub ${d&&d>=0?'up':'dn'}">${d?((d>=0?'▲ ':'▼ ')+fmtk(Math.abs(d))):''}</div></div>
+      <div class="kpi"><div class="kpi-label">Reprogramaciones</div><div class="kpi-val">${rTot||0}</div></div>
+      <div class="kpi"><div class="kpi-label">Atrasadas</div><div class="kpi-val">${at.n}</div><div class="kpi-sub" style="color:#aaa">${at.n?at.dias+' días prom.':''}</div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Reprogramaciones por tipo de orden</h3>
+        ${reprogItems.length
+          ? reprogItems.map(([tipo,n])=>{
+              const barPct=Math.round(n/maxR*100);
+              const label={
+                'COMPOSTURA DE ROPA':'Compostura','PLANCHADO':'Planchado','TINTORERIA':'Tintorería',
+                'REPARACION DE CALZADO':'Rep. calzado','LAVANDERIA':'Lavandería','BAGSPA':'BagSpa','BORDADOS':'Bordados'
+              }[tipo]||tipo;
+              return `<div class="bar-row">
+                <span class="bar-label">${label}</span>
+                <div class="bar-wrap"><div class="bar-fill" style="width:${barPct}%;background:#185FA5"></div></div>
+                <span class="bar-val">${n}</span>
+              </div>`;
+            }).join('')
+          : '<p style="font-size:13px;color:#aaa;padding:8px 0">Sin reprogramaciones registradas</p>'
+        }
+      </div>
+
+      <div class="card">
+        <h3>Ventas por área — Abr 2025 vs 2026</h3>
+        ${areaList.length
+          ? areaList.map(([area,{v25,v26}])=>{
+              const dp = v25>0 ? pct(v25,v26) : null;
+              return `<div class="area-row">
+                <div>
+                  <div style="font-size:13px;font-weight:500">${area}</div>
+                  <div style="font-size:11px;color:#aaa">2025: ${fmtk(v25)} → 2026: ${fmtk(v26)}</div>
+                </div>
+                <span class="chip ${dp===null?'chip-info':dp>=5?'chip-ok':dp<=-5?'chip-dn':'chip-warn'}">${pctStr(dp)}</span>
+              </div>`;
+            }).join('')
+          : '<p style="font-size:13px;color:#aaa">Sin desglose por área disponible</p>'
+        }
+      </div>
+    </div>
+
+    ${at.n > 0 ? `<div class="card" style="margin-top:14px">
+      <h3>Órdenes atrasadas</h3>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <div class="kpi" style="flex:1;min-width:120px"><div class="kpi-label">Número de órdenes</div><div class="kpi-val dn">${at.n}</div></div>
+        <div class="kpi" style="flex:1;min-width:120px"><div class="kpi-label">Días prom. de retraso</div><div class="kpi-val ${at.dias>7?'dn':'up'}">${at.dias}</div></div>
+        <div class="kpi" style="flex:2;min-width:180px"><div class="kpi-label">Riesgo estimado</div><div class="kpi-val" style="font-size:15px;padding-top:4px">${at.dias>=10?'⚠️ Alto — revisar urgente':at.dias>=5?'⚡ Medio — atención':'✅ Bajo'}</div></div>
+      </div>
+    </div>` : ''}
+  `;
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const res = await fetch(DATOS_URL);
+    if (!res.ok) throw new Error('No se pudo cargar datos.json');
+    const d = await res.json();
+    VENTAS      = d.VENTAS;
+    AREAS_TOTAL = d.AREAS_TOTAL;
+    AREAS_SUC   = d.AREAS_SUC;
+    REPROG      = d.REPROG;
+    ATRASADAS   = d.ATRASADAS;
+    CANC_CAT    = d.CANC_CAT;
+    CANC_TIPO   = d.CANC_TIPO;
+    initCharts();
+  } catch (err) {
+    document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;color:#888;text-align:center;padding:2rem"><div><div style="font-size:48px;margin-bottom:1rem">🔒</div><p style="font-size:18px;font-weight:600;color:#1a1a2e;margin:0 0 8px">Acceso no disponible</p><p style="font-size:14px;margin:0">Los datos de este dashboard han sido desactivados.<br>Contacta al administrador si crees que es un error.</p></div></div>`;
+  }
+});
+</script>
+</body>
+</html>
