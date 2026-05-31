@@ -1,0 +1,108 @@
+{
+  "RS": {
+    "L": ["CSTC","SGCG","Lavarent","JATM","Mautra","GTM"],
+    "H": {
+      "CSTC":     [56,52,49,52],
+      "SGCG":     [48,48,46,47],
+      "Lavarent": [25,25,22,18],
+      "JATM":     [21,19,19,20],
+      "Mautra":   [16,14,15,13],
+      "GTM":      [6,6,6,6]
+    },
+    "C": {
+      "CSTC":     [940000,738000,870000,650000],
+      "SGCG":     [720000,550000,640000,700000],
+      "Lavarent": [200000,160000,175000,140000],
+      "JATM":     [130000,100000,115000,118000],
+      "Mautra":   [110000,85000,100000,95000],
+      "GTM":      [55000,45000,50000,52000]
+    }
+  },
+  "TI": [
+    {"s":"Oficina Apodaca","e":418073,"f":315336,"m":388068,"a":391970,"t":1513447,"p":0.192,"em":17.8,"c":85025},
+    {"s":"Equipos Mautra","e":363048,"f":281485,"m":330504,"a":320624,"t":1295661,"p":0.164,"em":17.2,"c":75329},
+    {"s":"Valle","e":139826,"f":124822,"m":161123,"a":145524,"t":571295,"p":0.072,"em":6,"c":95216},
+    {"s":"San Jeronimo","e":135665,"f":96023,"m":128320,"a":165757,"t":525765,"p":0.067,"em":9.8,"c":53650},
+    {"s":"San Agustin Itos","e":94607,"f":75734,"m":93873,"a":107671,"t":371884,"p":0.047,"em":7,"c":53126},
+    {"s":"Apodaca 1","e":96539,"f":73171,"m":93245,"a":95351,"t":358306,"p":0.045,"em":9.5,"c":37716},
+    {"s":"Estanzuela","e":77733,"f":59224,"m":65122,"a":87666,"t":289745,"p":0.037,"em":6.2,"c":46733},
+    {"s":"Contry","e":67199,"f":55956,"m":76279,"a":77599,"t":277033,"p":0.035,"em":5.2,"c":53276},
+    {"s":"Brisas","e":71734,"f":54996,"m":66938,"a":73120,"t":266788,"p":0.034,"em":5,"c":53358},
+    {"s":"Plaza del Lago","e":65749,"f":42183,"m":72540,"a":63510,"t":243982,"p":0.031,"em":5,"c":48796},
+    {"s":"Diego Diaz","e":58833,"f":44643,"m":53036,"a":59007,"t":215519,"p":0.027,"em":5.2,"c":41446},
+    {"s":"Pablo Livas","e":45842,"f":36838,"m":36943,"a":56162,"t":175786,"p":0.022,"em":6.5,"c":27044},
+    {"s":"JG Leal","e":44517,"f":32700,"m":34626,"a":39351,"t":151194,"p":0.019,"em":4.8,"c":31499},
+    {"s":"Concordia","e":30438,"f":25609,"m":29392,"a":28404,"t":113842,"p":0.014,"em":2.8,"c":40658},
+    {"s":"H. los Morales","e":34474,"f":18938,"m":29030,"a":31389,"t":113831,"p":0.014,"em":3,"c":37944},
+    {"s":"Zuazua","e":25750,"f":20000,"m":22667,"a":34117,"t":102534,"p":0.013,"em":4.2,"c":24413},
+    {"s":"Riviera del Sol","e":32252,"f":22421,"m":22403,"a":25350,"t":102427,"p":0.013,"em":3.2,"c":32008},
+    {"s":"Carpintero","e":30462,"f":22069,"m":24521,"a":25306,"t":102358,"p":0.013,"em":3.5,"c":29245},
+    {"s":"Portal de Lincoln","e":28857,"f":23086,"m":21602,"a":25868,"t":99413,"p":0.013,"em":4,"c":24853},
+    {"s":"Los Pinos","e":32000,"f":16471,"m":22250,"a":27629,"t":98350,"p":0.012,"em":4.5,"c":21856}
+  ],
+  "PS": [
+    {"s":"Contry","co":461641},{"s":"San Jeronimo","co":404465},{"s":"S.Agustin Itos","co":385026},
+    {"s":"Brisas","co":381632},{"s":"Estanzuela","co":377102},{"s":"Apodaca 1","co":219141},
+    {"s":"Valle","co":148121},{"s":"Plaza del Lago","co":136768}
+  ],
+  "TR": [
+    {"e":"OMAR VENTURA CASTILLO","ti":"Calzado","su":"Valle","pr":512393,"co":104313,"en":109405,"fe":125608,"ma":125755,"ab":151626},
+    {"e":"EDELMIRO VALERO CAMACHO","ti":"Calzado","su":"Valle","pr":397708,"co":57390,"en":96750,"fe":90984,"ma":93292,"ab":116683},
+    {"e":"JULIAN DARIO PUENTE","ti":"Calzado","su":"Valle","pr":383265,"co":39459,"en":96294,"fe":90996,"ma":71631,"ab":124344},
+    {"e":"RICARDO VAZQUEZ IBARRA","ti":"Calzado","su":"S.Agustin Itos","pr":213963,"co":21916,"en":45306,"fe":46885,"ma":47576,"ab":74196},
+    {"e":"DOMINGO VAZQUEZ RAMOS","ti":"Calzado","su":"Brisas","pr":162497,"co":3264,"en":29219,"fe":41904,"ma":42931,"ab":48443},
+    {"e":"ANA ISABEL SALDIVAR","ti":"Costura","su":"San Jeronimo","pr":404465,"co":56003,"en":115397,"fe":99446,"ma":74205,"ab":115417},
+    {"e":"LUISA A. CISNEROS","ti":"Costura","su":"Estanzuela","pr":377102,"co":110118,"en":96397,"fe":80544,"ma":80364,"ab":119797},
+    {"e":"YOLANDA CRISOSTOMO","ti":"Costura","su":"Brisas","pr":357355,"co":27924,"en":98167,"fe":50884,"ma":84292,"ab":124012},
+    {"e":"MARICELA LOPEZ","ti":"Costura","su":"Contry","pr":319068,"co":33477,"en":96906,"fe":39321,"ma":64963,"ab":117878},
+    {"e":"MARIA CONCEPCION M.","ti":"Costura","su":"S.Agustin Itos","pr":306191,"co":31541,"en":68843,"fe":80932,"ma":65481,"ab":90935},
+    {"e":"EMILIA REYES TREJO","ti":"Costura","su":"Apodaca 1","pr":219141,"co":10343,"en":48794,"fe":50730,"ma":49551,"ab":70067},
+    {"e":"MARTHA MONICA HERNANDEZ","ti":"Costura","su":"Valle","pr":139991,"co":1202,"en":6960,"fe":14358,"ma":54356,"ab":64316},
+    {"e":"JULIAN HERNANDEZ","ti":"Costura","su":"Contry","pr":142574,"co":40977,"en":30937,"fe":42466,"ma":26163,"ab":43008},
+    {"e":"MARIA LUISA ZAMARRIPA","ti":"Costura","su":"Plaza del Lago","pr":136768,"co":5121,"en":22651,"fe":37955,"ma":29885,"ab":46277},
+    {"e":"LAURENCIA MEDRANO","ti":"Costura","su":"S.Agustin Itos","pr":78835,"co":25225,"en":24136,"fe":22343,"ma":14248,"ab":18108},
+    {"e":"BLANCA FRANCISCA LUGO","ti":"Costura","su":"Brisas","pr":24277,"co":0,"en":0,"fe":24277,"ma":0,"ab":0},
+    {"e":"TERESA PENA RIVERA","ti":"Plancha","su":"San Jeronimo","pr":11630,"co":52293,"en":3026,"fe":2962,"ma":2095,"ab":3547},
+    {"e":"JUANA HURTADO SANCHEZ","ti":"Plancha","su":"Plaza del Lago","pr":18051,"co":12167,"en":4546,"fe":3741,"ma":3991,"ab":5773},
+    {"e":"YESENIA DELGADO GARCIA","ti":"Plancha","su":"Estanzuela","pr":11587,"co":45483,"en":1949,"fe":3176,"ma":2584,"ab":3878},
+    {"e":"MARIA DEL REFUGIO PEREZ","ti":"Plancha","su":"S.Agustin Itos","pr":9842,"co":37352,"en":2511,"fe":1851,"ma":2136,"ab":3344},
+    {"e":"MARIA ANGELICA PUENTE","ti":"Plancha","su":"San Jeronimo","pr":6516,"co":29325,"en":1655,"fe":1367,"ma":1267,"ab":2227},
+    {"e":"LUZ ELENA SILVA GUEL","ti":"Plancha","su":"San Jeronimo","pr":5573,"co":25980,"en":1639,"fe":1055,"ma":1011,"ab":1868},
+    {"e":"BLANCA EDITH GUTIERREZ","ti":"Plancha","su":"San Jeronimo","pr":13959,"co":4729,"en":3538,"fe":2513,"ma":3261,"ab":4647},
+    {"e":"MARTINA SONIA RAMIREZ","ti":"Plancha","su":"Apodaca 1","pr":13146,"co":9639,"en":3242,"fe":2639,"ma":2999,"ab":4266},
+    {"e":"SOL MARIA GALLEGOS","ti":"Plancha","su":"Plaza del Lago","pr":2888,"co":6173,"en":1673,"fe":0,"ma":0,"ab":1215},
+    {"e":"BLANCA ISELA SEGURA","ti":"Plancha","su":"Brisas","pr":2555,"co":9526,"en":797,"fe":988,"ma":301,"ab":469},
+    {"e":"VANESSA HERNANDEZ GALINDO","ti":"Plancha","su":"Estanzuela","pr":2159,"co":9396,"en":717,"fe":270,"ma":312,"ab":860},
+    {"e":"LAURA ISMELDA HERNANDEZ","ti":"Plancha","su":"Estanzuela","pr":1931,"co":5812,"en":559,"fe":983,"ma":389,"ab":0},
+    {"e":"MARIA ISABEL MARTINEZ","ti":"Plancha","su":"San Jeronimo","pr":11362,"co":0,"en":11362,"fe":0,"ma":0,"ab":0},
+    {"e":"INGRID VANESSA HERNANDEZ","ti":"Plancha","su":"Plaza del Lago","pr":2328,"co":0,"en":0,"fe":1161,"ma":1167,"ab":0},
+    {"e":"ANDREA CECILIA TERAN","ti":"Plancha","su":"Los Pinos","pr":412,"co":0,"en":0,"fe":412,"ma":0,"ab":0},
+    {"e":"BERTHA ALICIA FUENTES","ti":"Plancha","su":"S.Agustin Itos","pr":172,"co":0,"en":0,"fe":172,"ma":0,"ab":0},
+    {"e":"LENNY E. CHAGOYA","ti":"Plancha","su":"Heb La Puerta","pr":30,"co":0,"en":0,"fe":0,"ma":0,"ab":30},
+    {"e":"ZURISADAI ARRAMBIDE","ti":"Plancha","su":"Heb La Puerta","pr":30,"co":0,"en":0,"fe":0,"ma":0,"ab":30}
+  ],
+  "VD": {
+    "mv": [3959183,3150490,3498989,3661211],
+    "mc": [972059,738646,941767,1037868],
+    "cats": [
+      {"n":"Costura","p":[0.296,0.258,0.257,0.296]},
+      {"n":"Planchado","p":[0.488,0.381,0.389,0.506]},
+      {"n":"Calzado","p":[0.321,0.285,0.334,0.325]}
+    ],
+    "su": [
+      {"s":"JG Leal","v":1360639,"c":151194,"p":0.111},
+      {"s":"H.los Morales","v":1096466,"c":113831,"p":0.104},
+      {"s":"Pablo Livas","v":1230375,"c":175786,"p":0.143},
+      {"s":"Apodaca 1","v":2417976,"c":398544,"p":0.165},
+      {"s":"Heb La Puerta","v":406328,"c":88974,"p":0.219},
+      {"s":"Diego Diaz","v":1028969,"c":215519,"p":0.209},
+      {"s":"Brisas","v":945977,"c":266788,"p":0.282},
+      {"s":"Plaza del Lago","v":774604,"c":243982,"p":0.315},
+      {"s":"Contry","v":766861,"c":277033,"p":0.361},
+      {"s":"Estanzuela","v":822198,"c":289745,"p":0.352},
+      {"s":"San Agustin Itos","v":1011822,"c":371884,"p":0.368},
+      {"s":"Valle","v":1454088,"c":571295,"p":0.393},
+      {"s":"San Jeronimo","v":953568,"c":525765,"p":0.551}
+    ]
+  }
+}
